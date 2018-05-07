@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser,BaseUserManager)
 
+from django.contrib.auth.models import PermissionsMixin
+
 # Create your models here.
 
 
@@ -23,16 +25,19 @@ class MyUserManager(BaseUserManager):
         email,
         password=password
     )
-        user.is_admin=True
+        user.is_admin = True
+        user.is_staff = True
         user.save(using=self._db)
         return user
 
 
-class User(AbstractBaseUser):
+class UserProfile(AbstractBaseUser,PermissionsMixin):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, unique=True)
     mobile_no = models.IntegerField()
-    password = models.CharField(max_length=10)
+    # password = models.CharField(max_length=10)
+
+    # is_staff = models.BooleanField(('staff status'), default=False,)
 
     objects = MyUserManager()
     USERNAME_FIELD = 'email'

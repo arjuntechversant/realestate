@@ -7,5 +7,5 @@ from django.contrib.auth.models import User
 
 from .models import *
 # admin.site.register(Registration)
-admin.site.register(User)
+admin.site.register(UserProfile)
 # admin.site.register(Registration)

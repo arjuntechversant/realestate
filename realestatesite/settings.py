@@ -123,7 +123,7 @@ STATIC_URL = '/static/'
 
 # LOGIN_REDIRECT_URL = 'home'
 
-AUTH_USER_MODEL = 'realapp.User'
+AUTH_USER_MODEL = 'realapp.UserProfile'
 
 MEDIA_ROOT= os.path.join(BASE_DIR, 'media/')
 MEDIA_URL= "/media/"
