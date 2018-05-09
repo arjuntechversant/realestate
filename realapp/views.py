@@ -2,12 +2,13 @@
 from django.shortcuts import render
 
 from django.contrib import messages
-from django.views.generic import FormView
+from django.views.generic import *
 from .forms import *
 from .models import *
-from django.http import HttpResponse
+from django.http import *
 from django.contrib.auth import *
 from django.contrib.auth import get_user_model
+from  django.views import  generic
 
 
 # Create your views here.
@@ -48,7 +49,8 @@ class LoginUserView(FormView):
 
                 if user is not None:
                         login(request, user)
-                        return render(request, 'realapp/home.html')
+                        #return render(request, 'realapp/home.html')
+                        return HttpResponseRedirect("home")
 
                 else:
                         return HttpResponse("invalid")
@@ -72,10 +74,28 @@ class AdPostingView(FormView):
                 return render(self.request, "realapp/home.html")
 
 
+class HomeUserView(generic.ListView):
 
-class HomeUserView(FormView):
-        # pass
-        # template_name = "realapp/home.html"
-        # form_class = LoginUserForm
-        def form_valid(self, form):
-                return render(self.request, 'realapp/home.html')
+        template_name = "realapp/home.html"
+        model = Item
+
+        def get_context_data(self, **kwargs):
+            context = super(HomeUserView, self).get_context_data(**kwargs)
+            print(context)
+            return context
+
+
+class DetailUserView(generic.TemplateView):
+    model = Item
+    template_name = 'realapp/detail.html'
+    #template_name = 'detail.html'
+    #form_class = AnsForm
+    #success_url='/login/success'
+
+    def get_context_data(self, args, *kwargs):
+        context = super(DetailUserView,self).get_context_data(**kwargs)
+        pid = self.kwargs['pid']
+        q_obj = Quest.objects.get(id=pid)
+        context['estate'] = q_obj
+
+        return context

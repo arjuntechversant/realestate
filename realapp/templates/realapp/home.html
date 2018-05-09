@@ -1,6 +1,26 @@
+
 <h1>home</h1>
 <h3>hi {{request.user.name}} ,</h3>
-{{request.}}
+
 <a href="{% url 'realapp:adposting' %}">POST AD</a>
 <br/>
 <a href="{%url 'realapp:login'%}">LOG OUT</a>
+
+{% block content %}
+    {% if object_list %}
+    <ul>
+        {% for item in object_list %}
+
+        <li>
+        <a href="{% url 'realapp:details' pid='item.id' %}" >{{ item.item_title }}</a> <img src="{{item.item_images.url}}"/> {{item.city}} Rs {{item.price}} /-
+
+
+
+            <br/>
+        </li>
+        {%endfor%}
+    </ul>
+    {%else%}
+        <p>NO item</p>
+    {%endif%}
+{%endblock%}
