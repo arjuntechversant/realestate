@@ -9,6 +9,11 @@ class RegisterUserForm(forms.ModelForm):
     mobile_no = forms.IntegerField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def __init__(self, *args, **kwargs):
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs = {'class': 'form-control'}
+
 
     class Meta:
             model = UserProfile
@@ -18,11 +23,21 @@ class RegisterUserForm(forms.ModelForm):
 class LoginUserForm(forms.Form):
         email = forms.EmailField(max_length=50)
         password = forms.CharField(widget=forms.PasswordInput)
-
+        def __init__(self, *args, **kwargs):
+            super(LoginUserForm, self).__init__(*args, **kwargs)
+            for field in self.fields.values():
+                field.widget.attrs = {'class': 'form-control'}
 
 class AdPostingForm(forms.ModelForm):
     item_images=forms.ImageField()
+
+    def __init__(self, *args, **kwargs):
+        super(AdPostingForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs = {'class': 'form-control'}
+
     class Meta:
         model = Item
         fields = '__all__'
         # exclude=('item_images',)
+

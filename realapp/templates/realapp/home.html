@@ -1,26 +1,41 @@
-
-<h1>home</h1>
-<h3>hi {{request.user.name}} ,</h3>
-
-<a href="{% url 'realapp:adposting' %}">POST AD</a>
-<br/>
-<a href="{%url 'realapp:login'%}">LOG OUT</a>
+{% extends 'realapp/base.html' %}
+{% load staticfiles %}
 
 {% block content %}
-    {% if object_list %}
-    <ul>
-        {% for item in object_list %}
-
-        <li>
-        <a href="{% url 'realapp:details' pid='item.id' %}" >{{ item.item_title }}</a> <img src="{{item.item_images.url}}"/> {{item.city}} Rs {{item.price}} /-
 
 
+        <h1>home</h1>
+        <h3>hi {{request.user.name}} ,</h3>
 
-            <br/>
-        </li>
-        {%endfor%}
-    </ul>
-    {%else%}
-        <p>NO item</p>
-    {%endif%}
-{%endblock%}
+        <a href="{% url 'realapp:adposting' %}">POST AD</a>
+        <br/>
+        <a href="{%url 'realapp:login'%}">LOG OUT</a>
+
+
+            <!--{% if object_list %}-->
+<div class="row">
+                {% for item in object_list %}
+
+                     <div class="col-md-4">
+
+                            <div class="card"  style="background-color:white">
+
+                                    <a href="{% url 'realapp:details' item.id %}" >{{ item.item_title }}</a>
+                                 <img class="card-img-top" width=200px height=200px src="{{item.item_images.url}}"/>
+
+                                 <div class="card-body">
+                                            {{item.city}}
+
+                                            Rs {{item.price}} /-
+
+                                    </div>
+                             </div>
+                     </div>
+
+
+                    {%endfor%}
+</div>
+            <!--{%else%}-->
+                <!--<p>NO item</p>-->
+            <!--{%endif%}-->
+        {%endblock%}

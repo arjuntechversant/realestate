@@ -1,31 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'realapp/base.html' %}
+{% load staticfiles %}
 
-<body>
-<!--{% block content%}-->
-    <!--<h1>{{item.item_title}}</h1>-->
-    <!--<p>{{item.item_description}}</p>-->
-    <!--&lt;!&ndash;<p>{{item.item_type}}</p>&ndash;&gt;-->
-    <!--<p>{{item.item_images}}</p>-->
-    <!--<p>{{item.name}}</p>-->
-    <!--<p>{{item.contact_phone_no}}</p>-->
-    <!--<p>{{item.city}}</p>-->
-    <!--<p>{{item.item_price}}</p>-->
-
-<!--{%endblock%}-->
-
-
-
-{% for est in estate%}
-    {{est}}
-
-
-{% endfor %}
+{% block content %}
 
 
 
 
 
+  <h1>{{estate.item_title}} </h1> <hr><br>
 
-</body>
-</html>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-4">    <img width=350px height=500px src="{{estate.item_images.url}}"/> </div>
+              <div class="col-sm-8">
+            <div class="panel-group">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">  {{estate.item_title}}</div>
+                        <div class="panel-body">DESCRIPTION:  {{estate.item_description}}</div>
+                        <div class="panel-body">LOCATION:   {{estate.city}} </div>
+                        <div class="panel-body">PRICE:  {{estate.price}} </div>
+                        <!--<div class="panel-body">   {{estate.price}}  </div>-->
+                        <div class="panel-body">CONTACT PHONE NUMBER:   {{estate.contact_phone_no}}  </div>
+                    </div>
+              </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+

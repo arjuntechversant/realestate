@@ -8,7 +8,7 @@ from .models import *
 from django.http import *
 from django.contrib.auth import *
 from django.contrib.auth import get_user_model
-from  django.views import  generic
+from django.views import generic
 
 
 # Create your views here.
@@ -27,10 +27,9 @@ class RegisterUserView(FormView):
                                                  form.cleaned_data.get('name')
                                                  )
 
-            # messages.success(self.request, "ok")
 
             return render(self.request,"realapp/home.html")
-            # success_url = '/home/'
+
 
 
 class LoginUserView(FormView):
@@ -49,16 +48,11 @@ class LoginUserView(FormView):
 
                 if user is not None:
                         login(request, user)
-                        #return render(request, 'realapp/home.html')
+
                         return HttpResponseRedirect("home")
 
                 else:
-                        return HttpResponse("invalid")
-
-                # except auth.ObjectNotExist:
-                #         print("invalid user")
-
-                # return render(request,'login.html')
+                        return HttpResponse("wrong input")
 
 
 class AdPostingView(FormView):
@@ -69,7 +63,6 @@ class AdPostingView(FormView):
 
         def form_valid(self, form):
 
-                # form= AdPostingForm(self.request.POST,self.request.FILES)
                 form.save()
                 return render(self.request, "realapp/home.html")
 
@@ -85,17 +78,15 @@ class HomeUserView(generic.ListView):
             return context
 
 
-class DetailUserView(generic.TemplateView):
+class DetailUserView(generic.DetailView):
     model = Item
     template_name = 'realapp/detail.html'
-    #template_name = 'detail.html'
-    #form_class = AnsForm
-    #success_url='/login/success'
+    context_object_name = 'estate'
 
-    def get_context_data(self, args, *kwargs):
-        context = super(DetailUserView,self).get_context_data(**kwargs)
-        pid = self.kwargs['pid']
-        q_obj = Quest.objects.get(id=pid)
-        context['estate'] = q_obj
-
-        return context
+    # def get_context_data(self, *kwargs):
+    #     context = super(DetailUserView, self).get_context_data(**kwargs)
+    #     pidd = self.kwargs['pid']
+    #     q_obj = Item.objects.get(id=pidd)
+    #     context['estate'] = q_obj
+    #
+    #     return context
