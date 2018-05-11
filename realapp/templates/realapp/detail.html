@@ -15,22 +15,23 @@
     <div class="row">
         <div class="col-sm-4">    <img width=350px height=500px src="{{estate.item_images.url}}"/> </div>
               <div class="col-sm-8">
-            <div class="panel-group">
+                <div class="panel-group">
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">  {{estate.item_title}}</div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">  {{estate.item_title}}</div>
                         <div class="panel-body">DESCRIPTION:  {{estate.item_description}}</div>
                         <div class="panel-body">LOCATION:   {{estate.city}} </div>
                         <div class="panel-body">PRICE:  {{estate.price}} </div>
                         <!--<div class="panel-body">   {{estate.price}}  </div>-->
                         <div class="panel-body">CONTACT PHONE NUMBER:   {{estate.contact_phone_no}}  </div>
                     </div>
+                </div>
               </div>
-        </div>
     </div>
-
-  </div>
 </div>
+<a class="btn btn-primary" href="{%url 'realapp:edit' estate.id %}">edit add</a>
+
+<a class="btn btn-primary" href="{%url 'realapp:delete' estate.id %}">delete add</a>
 {% endblock %}
 
 

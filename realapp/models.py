@@ -3,6 +3,7 @@ from django.contrib.auth.models import (AbstractBaseUser,BaseUserManager)
 
 from django.contrib.auth.models import PermissionsMixin
 
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -51,9 +52,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 class Item(models.Model):
     ITEM_TYPE = (
-        ('V','Villa'),
-        ('P','Plot'),
-        ('F','Flat'),
+        ('V', 'Villa'),
+        ('P', 'Plot'),
+        ('F', 'Flat'),
     )
     CITY = (
         ('KOCHI','kochi'),
@@ -70,7 +71,7 @@ class Item(models.Model):
     name = models.CharField(max_length=15)
     contact_phone_no = models.IntegerField()
     city = models.CharField(max_length=20, choices=CITY)
-    price=models.IntegerField(default=1)
+    price = models.IntegerField(default=1)
 
 
     def __str__(self):
