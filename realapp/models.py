@@ -45,11 +45,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'mobile_no']
 
-
-
-
-
-
 class Item(models.Model):
     ITEM_TYPE = (
         ('V', 'Villa'),
@@ -68,14 +63,14 @@ class Item(models.Model):
     item_description = models.CharField(max_length=90)
     item_type = models.CharField(max_length=1, choices=ITEM_TYPE)
     item_images = models.ImageField(upload_to='realapp/images')
-    name = models.CharField(max_length=15)
+    creator_name = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     contact_phone_no = models.IntegerField()
     city = models.CharField(max_length=20, choices=CITY)
     price = models.IntegerField(default=1)
 
-
+# for viewing data rather than objects in admin
     def __str__(self):
-        return self.name + ": " + str(self.item_images)
+        return self.item_title
 
 
 

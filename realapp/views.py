@@ -12,9 +12,11 @@ from django.views import generic
 from django.views.generic.edit import UpdateView
 from django.views.generic import DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import *
 
 # Create your views here.
 class RegisterUserView(FormView):
+
     template_name = "realapp/register.html"
     form_class = RegisterUserForm
     success_url = '/login/'
@@ -29,6 +31,7 @@ class RegisterUserView(FormView):
                                              )
 
         # return render(self.request, "realapp/home.html")
+        return super().form_valid(form)
 
 
 class LoginUserView(FormView):
@@ -60,6 +63,7 @@ class LogoutView(FormView):
 
 
 class AdPostingView(LoginRequiredMixin,FormView):
+
     # pass
     template_name = "realapp/adposting.html"
     form_class = AdPostingForm
@@ -67,6 +71,7 @@ class AdPostingView(LoginRequiredMixin,FormView):
     success_url = reverse_lazy('realapp:home')
 
     def form_valid(self, form):
+        form.instance.creator_name=self.request.user
         form.save()
         return super(AdPostingView, self).form_valid(form)
 
@@ -93,6 +98,7 @@ class DetailUserView(generic.DetailView):
     #     context['estate'] = q_obj
     #
     #     return context
+
 
 class EditAdd(UpdateView):
     model = Item
