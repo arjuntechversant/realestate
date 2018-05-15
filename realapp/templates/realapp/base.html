@@ -31,7 +31,12 @@
       <!--<li class="active"><a href="#">Home</a></li>-->
 
       <li><a href="{% url 'realapp:adposting' %}">POST ADD</a></li>
-      <!--<li><a href="{%url 'logout'%}">LOG OUT</a></li>-->
+      {% if request.user.is_authenticated%}
+        <li><a href="{%url 'realapp:logout'%}">LOG OUT</a></li>
+        <li><a href="{%url 'realapp:myads'%}">MY ADS</a></li>
+
+
+      {% endif %}
       <!--<li><a href="#">Page 3</a></li>-->
     </ul>
   </div>

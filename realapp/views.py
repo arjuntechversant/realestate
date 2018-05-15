@@ -13,31 +13,51 @@ from django.views.generic.edit import UpdateView
 from django.views.generic import DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import *
+from django.template.loader import render_to_string
+
+from django.core.mail import send_mail
+from django.core.signing import Signer
+
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 class RegisterUserView(FormView):
 
     template_name = "realapp/register.html"
     form_class = RegisterUserForm
-    success_url = '/login/'
+    # success_url = '/login/'
+    success_url = reverse_lazy('realapp:login')
 
     def form_valid(self, form):
-        # form.save()
-        # user.set_password(password)
-        get_user_model().objects.create_user(form.cleaned_data.get('email'),
-                                             form.cleaned_data.get('password'),
-                                             form.cleaned_data.get('mobile_no'),
-                                             form.cleaned_data.get('name')
-                                             )
+            #obj = form.save()
+            # obj.set_password(password)
+            # get_user_model().objects.create_user(form.cleaned_data.get('email'),
+            #                                       form.cleaned_data.get('password'),
+            #                                       form.cleaned_data.get('mobile_no'),
+            #                                       form.cleaned_data.get('name')
+            #                                       )
 
-        # return render(self.request, "realapp/home.html")
-        return super().form_valid(form)
+            obj = form.save(commit=False)
+            obj.password = make_password(obj.password)
+            obj.is_active = False
+            form.save()
+            signer = Signer()
+            signed_value = signer.sign(obj.email)
+            key = ''.join(signed_value.split(':')[1:])
+            reg_obj = Registration.objects.create(user=obj, key=key)
+            msg_html = render_to_string('realapp/email-act.html', {'key': key})
+
+            send_mail("123", "123", 'anjitha.test@gmail.com', [obj.email], html_message=msg_html, fail_silently=False)
+
+            # return render(self.request, "realapp/home.html")
+            return super().form_valid(form)
 
 
 class LoginUserView(FormView):
     template_name = "realapp/login.html"
     form_class = LoginUserForm
-    success_url = ''
+    # success_url = '/home'
+    # success_url = reverse_lazy('/home')
 
     def post(self, request, *args, **kwargs):
         email = request.POST['email']
@@ -50,14 +70,14 @@ class LoginUserView(FormView):
         if user is not None:
             login(request, user)
 
-            return HttpResponseRedirect("home")
+            return HttpResponseRedirect("/")
 
         else:
             return HttpResponse("wrong input")
 
 class LogoutView(FormView):
     def get(self, request, *args, **kwargs):
-        print (self.request.user.username)
+        print (self.request.user.email)
         logout(request)
         return HttpResponseRedirect('/')
 
@@ -74,6 +94,18 @@ class AdPostingView(LoginRequiredMixin,FormView):
         form.instance.creator_name=self.request.user
         form.save()
         return super(AdPostingView, self).form_valid(form)
+
+
+class MyAds(generic.ListView):
+    template_name = "realapp/myads.html"
+    model = Item
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(HomeUserView, self).get_context_data(**kwargs)
+    #     print(context)
+    #     return context
+    def get_queryset(self):
+        return Item.objects.filter(creator_name=self.request.user)
 
 
 class HomeUserView(generic.ListView):
@@ -103,7 +135,9 @@ class DetailUserView(generic.DetailView):
 class EditAdd(UpdateView):
     model = Item
     # form_class = AdPostingForm
-    fields = '__all__'
+    # fields = '__all__'
+    fields = ['item_title','item_description','item_images','city','price']
+    # exclude = ('creator_name_id',)
     template_name= 'realapp/detail_edit.html'
     success_url = '/'
 
@@ -112,6 +146,20 @@ class DeleteAdd(DeleteView):
     model = Item
     success_url = reverse_lazy('realapp:home')
 
+
+class RegistrationSuccess(TemplateView):
+    template_name = 'realapp/registration-success.html'
+
+    def get(self, request, args, *kwargs):
+        key = self.kwargs.get("key")
+        try:
+            reg_obj = Registration.objects.get(key=key)
+            reg_obj.user.is_active = True
+            reg_obj.save()
+            context = {'user': reg_obj, 'status': True}
+            return self.render_to_response(context)
+        except Registration.DoesNotExist:
+            return self.render_to_response({'status': False})
 
     # def get_object(self, queryset=None):
     #     queryset = Item.objects.all()[:1].get()

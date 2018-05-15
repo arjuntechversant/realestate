@@ -5,9 +5,12 @@
 
 <div class="row">
                 <div class="col-sm-4"></div><div class="col-sm-4">
+
+    <h3>please enter creator name as {{ user.email }}</h3>
     <h1>POST YOUR AD</h1>
 
     <form action =" " method="post" enctype="multipart/form-data">{% csrf_token %}
+
             {{ form.as_p }}
             <input type="submit" value="SUBMIT AD" />
     </form>

@@ -1,0 +1,39 @@
+{% extends 'realapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+
+        <h1>home</h1>
+        <h3>hi {{request.user.name}} , your ads</h3>
+
+
+        <br/>
+<div class="row">
+
+                    {% for item in object_list %}
+
+                        <div class="col-md-4">
+
+                            <div class="card"  style="background-color:white">
+
+                                    {{ item.item_title }}
+                                 <img class="card-img-top" width=200px height=200px src="{{item.item_images.url}}"/>
+
+                                 <div class="card-body">
+                                            {{item.city}}
+
+                                            Rs {{item.price}} /-
+
+                                     <a class="btn btn-primary" href="{%url 'realapp:edit' item.id %}">edit add</a>
+
+                                     <a class="btn btn-primary" href="{%url 'realapp:delete' item.id %}">delete add</a>
+
+
+
+                                 </div>
+                             </div>
+                        </div>
+                    {% endfor %}
+</div>
+{%endblock%}

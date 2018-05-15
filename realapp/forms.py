@@ -38,6 +38,6 @@ class AdPostingForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = '__all__'
-        # exclude=('item_images',)
+        # fields = '__all__'
+        exclude = ('creator_name',)
 
